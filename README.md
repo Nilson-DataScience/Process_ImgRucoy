@@ -1,4 +1,4 @@
-# Process_ImgRucoy
+# Process_ImgRy
 
 
 This project is entirely academic, aimed at putting into practice the programming knowledge acquired in a self-taught manner to prove my skills. That said, let's move on to the project presentation.
