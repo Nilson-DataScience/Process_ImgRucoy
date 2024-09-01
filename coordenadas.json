@@ -1,7 +1,3 @@
-//I'm presenting my non-relational database Lol, yes I know it's not in bson. 
-//But this json stores the user's screen coordinates to save time in repetitive processes. 
-
-
 {"x": 488, "y": 271, "x2": 201, "y2": 75, 
 "x3": 56, "y3": 410, "x4": 384, "y4": 278,
  "mob": 75, "mob2": 75}
