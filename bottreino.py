@@ -95,6 +95,8 @@ class GerenciadorBot(Bot_Treino):  # Herda de Bot_Treino
         opcao2 = int(input('Utilizar as Últimas Coordenadas ? \n [0] Sim ou [1] Não\n:'))
 
         if opcao2 == 0:
+            '''I'm presenting my non-relational database Lol, yes I know it's not in bson. 
+            But this json stores the user's screen coordinates to save time in repetitive processes.''' 
             with open('coordenadas.json', 'r') as arquivo:
                  self.tela = json.load(arquivo)
                  #print(self.tela)
