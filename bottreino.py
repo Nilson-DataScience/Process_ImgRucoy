@@ -7,7 +7,7 @@ class Bot_Treino():
     def __init__(self):
         self.corMob = {1:(107,105,107),3:(148,146,148),6:(206,166,0),9:(140,113,0),
         25:(247,243,247),35:(57,190,255),45:(255,60,57),50:(189,150,0),55:(148,146,148),225:(231,89,49),
-        75:(247,243,247),110:(255,0,0),120:(156,12,181)}
+        75:(247,243,247),110:(255,0,0),120:(156,12,181),275:(140,44,49),"melle":(206,48,49)}
 
 
     def obter_cor_na_coordenada(self, x, y):
@@ -64,26 +64,40 @@ class Bot_Treino():
 class GerenciadorBot(Bot_Treino):  # Herda de Bot_Treino
     def __init__(self):
         super().__init__()  # Chama o construtor da classe pai
+        self.tela = None
     
-    def looptreinoafk(self):
+    def looptreinoafk(self,tipo):
         tela = self.tela
-        print(tela)
-        while True:
-            # Tela 1
-            if super().verifica_img(tela['x'], tela['y'], tela['mob']):
-                print("Clique na imagem (cor predominante)")
-                super().treino(tela['x'], tela['y'], tela['x2'], tela['y2'], tela['mob'], tela['x3'], tela['y3'])
-            if super().verifica_img(tela['x'], tela['y'], tela['mob2']):
-                print("Clique na imagem (cor predominante)")
-                super().treino(tela['x'], tela['y'], tela['x2'], tela['y2'], tela['mob2'], tela['x3'], tela['y3'])
-            pyautogui.click(x=tela['x4'], y=tela['y4'])
-            time.sleep(10)
+        if tipo != 1:
+            while True:
+                # Tela 1
+                if super().verifica_img(tela['x'], tela['y'], tela['mob']):
+                    print("Clique na imagem (cor predominante)")
+                    super().treino(tela['x'], tela['y'], tela['x2'], tela['y2'], tela['mob'], tela['x3'], tela['y3'])
+                if super().verifica_img(tela['x'], tela['y'], tela['mob2']):
+                    print("Clique na imagem (cor predominante)")
+                    super().treino(tela['x'], tela['y'], tela['x2'], tela['y2'], tela['mob2'], tela['x3'], tela['y3'])
+                pyautogui.click(x=tela['x4'], y=tela['y4'])
+                time.sleep(10)
+        else:
+            while True:
+                melle = 'melle'
+                # Tela 1
+                if super().verifica_img(tela['x'], tela['y'], tela['mob']):
+                    print("Clique na imagem (cor predominante)")
+                    if super().verifica_img(tela['x5'], tela['y5'],melle):
+                        print('ele já está treinando')
+                    else:
+                        super().treino(tela['x'], tela['y'], tela['x2'], tela['y2'], tela['mob2'], tela['x3'], tela['y3'])
+                
+                pyautogui.click(x=tela['x4'], y=tela['y4'])
+                time.sleep(10)
 
 
-    def switch(self,i): 
+    def switch(self,i,j): 
         match i:
             case 1:
-                return self.looptreinoafk()
+                return self.looptreinoafk(j)
             case 2:
                 return "Opção 2 selecionada"
             case _:
@@ -91,34 +105,35 @@ class GerenciadorBot(Bot_Treino):  # Herda de Bot_Treino
 
     def start(self):
         print('Bem Vindo ao BotTreino \n [1] Treino Afk \n [2] Treino On \n [3] Treino Segunda Classe')
-        opcao = int(input('O Que Deseja:'))
+        opcao  = int(input('O Que Deseja:'))
         opcao2 = int(input('Utilizar as Últimas Coordenadas ? \n [0] Sim ou [1] Não\n:'))
+        opcao3 = int(input('Qual classe vc ira treinar? \n [1] Melle \n [2] Distance \n [3] Magic\n:'))
 
         if opcao2 == 0:
-            '''I'm presenting my non-relational database Lol, yes I know it's not in bson. 
-            But this json stores the user's screen coordinates to save time in repetitive processes.''' 
             with open('coordenadas.json', 'r') as arquivo:
                  self.tela = json.load(arquivo)
-                 #print(self.tela)
+    
         elif opcao2 == 1:
             tela = {}
             tela['x'], tela['y'] = super().coletarcoord('Monstro')
             tela['x2'], tela['y2'] = super().coletarcoord('Barra de Mana')
             tela['x3'], tela['y3'] = super().coletarcoord('Poção de Mana')
             tela['x4'], tela['y4'] = super().coletarcoord('Parede para o Jogo não deslogar')
+            tela['x5'], tela['y5'] = super().coletarcoord('Linha Vermelha do Mob')
             # As chaves 'mob' e 'mob2' já têm valores definidos
-            tela['mob'] = input('Nível para Mob de Treinamento :')
-            tela['mob2'] = input('2° Nível para Mob de Treinamento :')
-
-            
+            tela['mob'] = int(input('Nível para Mob de Treinamento :'))
+            tela['mob2'] = int(input('2° Nível para Mob de Treinamento :'))
+                    
             with open('coordenadas.json', 'w') as arquivo_json:
                  json.dump(tela, arquivo_json)
+            self.tela=tela
+
 
         else:
             print(f'\nNão Foi Encontrado essa Opção {opcao2}\n')
             self.start()
 
-        self.switch(opcao)
+        self.switch(opcao,opcao3)
 
     
   
@@ -130,30 +145,3 @@ gr.start()
 
 
 
-
-
- # Saída: Opção 1 selecionada
-
-'''while True:
-    bot.supertreino(tela['x3'], tela['y3'],tela['x2'], tela['y2'])
-
-while True:
-    # Tela 1
-    if bot.verifica_img(tela['x'], tela['y'], tela['mob']):
-        print("Clique na imagem (cor predominante)")
-        bot.treino(tela['x'], tela['y'], tela['x2'], tela['y2'], tela['mob'], tela['x3'], tela['y3'])
-    if bot.verifica_img(tela['x'], tela['y'], tela['mob2']):
-        print("Clique na imagem (cor predominante)")
-        bot.treino(tela['x'], tela['y'], tela['x2'], tela['y2'], tela['mob2'], tela['x3'], tela['y3'])
-    # Tela 2
-    #if bot.verifica_img(tela2['x'], tela2['y'], tela2['mob']):
-        print("Clique na imagem (cor predominante)")
-        bot.treino(tela2['x'], tela2['y'], tela2['x2'], tela2['y2'], tela2['mob'], tela2['x3'], tela2['y3'])
-    #if bot.verifica_img(tela2['x'], tela2['y'], tela2['mob2']):
-        #print("Clique na imagem (cor predominante)")
-        #bot.treino(tela2['x'], tela2['y'], tela2['x2'], tela2['y2'], tela2['mob2'], tela2['x3'], tela2['y3'])
-    pyautogui.click(x=tela['x4'], y=tela['y4'])
-    time.sleep(10)
-    #pyautogui.click(x=tela2['x4'], y=tela2['y4'])
-'''       
-    
