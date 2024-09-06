@@ -1,0 +1,5 @@
+#Please use a virtual environment such as miniconda, so that other frameworks don't interfere 
+#In your environment install:
+
+pip install pyautogui ==
+pip install pil ==
