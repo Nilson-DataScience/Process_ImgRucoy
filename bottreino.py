@@ -4,58 +4,131 @@ from PIL import ImageGrab
 import json
 
 class Bot_Treino():
+    """
+    Classe para treinar um bot que interage com a tela com base em cores específicas.
+
+    Atributos:
+    ----------
+    corMob : dict
+        Dicionário que mapeia identificadores para valores RGB de cores.
+
+    Métodos:
+    --------
+    __init__():
+        Inicializa a classe com um dicionário de cores.
+    
+    obter_cor_na_coordenada(x, y):
+        Captura a tela na coordenada especificada e retorna o valor RGB do pixel.
+
+    verifica_img(x, y, i):
+        Verifica se a cor na coordenada especificada corresponde à cor desejada.
+
+    treino(x, y, x2, y2, i, x3, y3):
+        Realiza uma ação de treino clicando em coordenadas específicas se as cores corresponderem.
+
+    coletarcoord(text):
+        Coleta e retorna as coordenadas atuais do cursor do mouse após um intervalo de tempo.
+    """
+
     def __init__(self):
         self.corMob = {1:(107,105,107),3:(148,146,148),6:(206,166,0),9:(140,113,0),
         25:(247,243,247),35:(57,190,255),45:(255,60,57),50:(189,150,0),55:(148,146,148),225:(231,89,49),
         75:(247,243,247),110:(255,0,0),120:(156,12,181),275:(140,44,49),"melle":(206,48,49)}
 
-
     def obter_cor_na_coordenada(self, x, y):
-        # Captura a tela na coordenada especificada
-        screenshot = ImageGrab.grab(bbox=(x, y, x + 1, y + 1))
+        """
+        Captura a tela na coordenada especificada e retorna o valor RGB do pixel.
 
-        # Obtém o valor RGB do pixel capturado
+        Parâmetros:
+        -----------
+        x : int
+            Coordenada x da tela.
+        y : int
+            Coordenada y da tela.
+
+        Retorna:
+        --------
+        tuple
+            Valor RGB do pixel na coordenada especificada.
+        """
+        screenshot = ImageGrab.grab(bbox=(x, y, x + 1, y + 1))
         rgb_pixel = screenshot.getpixel((0, 0))
-        #print(rgb_pixel)
         return rgb_pixel
     
     def verifica_img(self, x, y, i):
-        # Obtém a cor na coordenada especificada
-        cor_pixel = self.obter_cor_na_coordenada(x, y)
-        print('ultimas cordenadas', x,y)
+        """
+        Verifica se a cor na coordenada especificada corresponde à cor desejada.
 
-        # Compara a cor com as cores desejadas
+        Parâmetros:
+        -----------
+        x : int
+            Coordenada x da tela.
+        y : int
+            Coordenada y da tela.
+        i : int
+            Identificador da cor desejada no dicionário corMob.
+
+        Retorna:
+        --------
+        bool
+            True se a cor corresponder, False caso contrário.
+        """
+        cor_pixel = self.obter_cor_na_coordenada(x, y)
         if i in self.corMob and cor_pixel == self.corMob[i]:
             return True
         else:
-            
-            print('Saida da cor',cor_pixel)
             return False
     
-    def treino(self, x, y, x2, y2, i,x3,y3):
-        print('pq nao que bater')
-        if self.verifica_img(x2,y2,1):
+    def treino(self, x, y, x2, y2, i, x3, y3):
+        """
+        Realiza uma ação de treino clicando em coordenadas específicas se as cores corresponderem.
+
+        Parâmetros:
+        -----------
+        x : int
+            Coordenada x da tela para a primeira verificação.
+        y : int
+            Coordenada y da tela para a primeira verificação.
+        x2 : int
+            Coordenada x da tela para a segunda verificação.
+        y2 : int
+            Coordenada y da tela para a segunda verificação.
+        i : int
+            Identificador da cor desejada no dicionário corMob.
+        x3 : int
+            Coordenada x da tela para o clique.
+        y3 : int
+            Coordenada y da tela para o clique.
+        """
+        if self.verifica_img(x2, y2, 1):
             pyautogui.click(x=x3, y=y3)
             time.sleep(10)
         if self.verifica_img(x, y, i):
             pyautogui.click(x=x, y=y)
             time.sleep(10)
 
-    def supertreino(self,x,y,x2,y2):
-        if self.verifica_img(x2, y2, 1):
-            for i in range(2):
-                time.sleep(2)
-                pyautogui.click(x=x, y=y)
-            time.sleep(5)
     
-    def coletarcoord(self,text):
+    
+    def coletarcoord(self, text):
+        """
+        Coleta e retorna as coordenadas atuais do cursor do mouse após um intervalo de tempo.
+
+        Parâmetros:
+        -----------
+        text : str
+            Texto para exibir ao usuário durante a coleta de coordenadas.
+
+        Retorna:
+        --------
+        tuple
+            Coordenadas x e y atuais do cursor do mouse.
+        """
         print(f"Posicione o mouse na posição do {text} desejada em 10 segundos...")
         time.sleep(10)
-        # Obter as coordenadas atuais do cursor do mouse
         x, y = pyautogui.position()
-        # Exibir as coordenadas
         print(f"A posição atual do mouse é: x = {x}, y = {y}")
         return x, y
+
 
 
 
